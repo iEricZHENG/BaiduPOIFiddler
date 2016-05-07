@@ -31,7 +31,7 @@ namespace BaiduBusFiddler
         /// <param name="startStr">开始字符串</param>
         /// <param name="endStr">结束字符串</param>
         /// <returns>中间字符串</returns>
-        public static string Substring(string source, string startStr, string endStr)
+        public static string Substring(ref string source, string startStr, string endStr)
         {
             string result = "";
             Int32 index = source.IndexOf(startStr) + startStr.Length;
@@ -40,6 +40,16 @@ namespace BaiduBusFiddler
             result = source.Substring(index, endIndex - index);
             source = source.Substring(endIndex + 1);
             return result;
+        }
+        public static string ReplaceSubstring(string source, string startStr, string endStr,string replaceStr)
+        {
+            string result = "";
+            Int32 index = source.IndexOf(startStr) + startStr.Length;
+            Int32 endIndex = source.IndexOf(endStr, index);
+            //string titleStr = source.Substring(index, endIndex + 1 - index);
+            result = source.Substring(index, endIndex - index);
+            source.Replace(result,replaceStr);            
+            return source;
         }
     }
 }

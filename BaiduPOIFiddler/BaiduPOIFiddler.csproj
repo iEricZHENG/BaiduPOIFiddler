@@ -60,23 +60,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaiduPOI.cs">
-      <DependentUpon>BaiDuPOIContext.tt</DependentUpon>
+    <Compile Include="baidupoi.cs">
+      <DependentUpon>BaiduPOIContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="BaiDuPOIContext.Context.cs">
+    <Compile Include="BaiduPOIContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BaiDuPOIContext.Context.tt</DependentUpon>
+      <DependentUpon>BaiduPOIContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="BaiDuPOIContext.cs">
+    <Compile Include="BaiduPOIContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BaiDuPOIContext.tt</DependentUpon>
+      <DependentUpon>BaiduPOIContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="BaiDuPOIContext.Designer.cs">
+    <Compile Include="BaiduPOIContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BaiDuPOIContext.edmx</DependentUpon>
+      <DependentUpon>BaiduPOIContext.edmx</DependentUpon>
     </Compile>
     <Compile Include="BaiduPOI_JSON.cs" />
     <Compile Include="Helper.cs" />
@@ -85,13 +85,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <EntityDeploy Include="BaiDuPOIContext.edmx">
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="BaiduPOIContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>BaiDuPOIContext.Designer.cs</LastGenOutput>
+      <LastGenOutput>BaiduPOIContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="BaiDuPOIContext.edmx.diagram">
-      <DependentUpon>BaiDuPOIContext.edmx</DependentUpon>
+    <None Include="BaiduPOIContext.edmx.diagram">
+      <DependentUpon>BaiduPOIContext.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -116,15 +118,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BaiDuPOIContext.Context.tt">
+    <Content Include="BaiduPOIContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BaiDuPOIContext.edmx</DependentUpon>
-      <LastGenOutput>BaiDuPOIContext.Context.cs</LastGenOutput>
+      <DependentUpon>BaiduPOIContext.edmx</DependentUpon>
+      <LastGenOutput>BaiduPOIContext.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="BaiDuPOIContext.tt">
+    <Content Include="BaiduPOIContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BaiDuPOIContext.edmx</DependentUpon>
-      <LastGenOutput>BaiDuPOIContext.cs</LastGenOutput>
+      <DependentUpon>BaiduPOIContext.edmx</DependentUpon>
+      <LastGenOutput>BaiduPOIContext.cs</LastGenOutput>
     </Content>
     <Content Include="Lib\Newtonsoft.Json.dll" />
   </ItemGroup>

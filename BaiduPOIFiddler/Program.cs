@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft;
 using Newtonsoft.Json;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace BaiduBusFiddler
 {
@@ -38,7 +40,7 @@ namespace BaiduBusFiddler
                 }
                 catch (Exception e)
                 {
-                    File.AppendAllText("d:\\BusPOI_log.txt", e.Message.ToString());
+                    //File.AppendAllText("d:\\BusPOI_log.txt", e.Message.ToString());
                     continue;
                 }
             }
@@ -49,25 +51,69 @@ namespace BaiduBusFiddler
             if (dataReceived.oResponse.MIMEType == "text/javascript")
             {
                 Session iSeesion = new Session(new SessionData(dataReceived));
-
-
                 while ((iSeesion.state <= SessionStates.ReadingResponse))
                 {
                     continue;
-                }
-                //BaiduPOIEntities db = new BaiduPOIEntities();
+                }                
                 if (dataReceived.fullUrl.Contains("newmap"))
-                
                 {
                     iSeesion.utilDecodeResponse();
                     string str = iSeesion.GetResponseBodyAsString();
                     str = Helper.UnicodeToGb(str);
-                    System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    str = str.Trim();
                     try
-                    {
-                        //Model baiduPoi = js.Deserialize<Model>(str);                        
-                        //BaiduPOI_JSON baiduPoi= serializer.Deserialize<BaiduPOI_JSON>(new JsonTextReader(str));                                               
-                        BaiduPOI_JSON baiduPoi = JsonConvert.DeserializeObject<BaiduPOI_JSON>(str);
+                    {                        
+                        if (str.Contains("place_info"))
+                        {
+                            Newtonsoft.Json.Linq.JObject obj = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(str);
+                            JArray content = obj.Value<JArray>("content");
+                            using (BaiduPOIEntities db = new BaiduPOIEntities())
+                            {
+                                foreach (var item in content)
+                                {
+                                    //var model = new baidupoi();
+                                    string uid = item.Value<string>("uid");
+                                    var model = db.baidupoi.Where(a => a.uid == uid).FirstOrDefault();
+                                    if (model == null)
+                                    {
+                                        model = new baidupoi();
+                                        model.address = item.Value<string>("addr");
+                                        model.keyword = "";
+                                        model.name = item.Value<string>("name");
+                                        model.type = item.Value<string>("std_tag");
+                                        model.uid = item.Value<string>("uid");
+                                        string x = item.Value<string>("x");
+                                        model.x = Convert.ToDouble(x.Substring(0, x.Length - 2) + "." + x.Substring(x.Length - 2));
+                                        string y = item.Value<string>("y");
+                                        model.y = Convert.ToDouble(y.Substring(0, y.Length - 2) + "." + y.Substring(y.Length - 2));
+                                        db.baidupoi.Add(model);
+                                    }
+                                }
+                                db.SaveChanges();
+                            }
+                            #region 不用的代码
+                            //Newtonsoft.Json.Linq.JObject a = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(str);
+                            //JArray content = a.Value<JArray>("content");
+                            //foreach (var item in content)
+                            //{
+                            //    Console.WriteLine(item.Value<string>("name"));
+                            //}
+                            //a = GetPropertyValue(a, "First");                            
+                            //a = GetPropertyValue(a, "First");
+                            //a = GetPropertyValue(a, "Next");
+                            //a = GetPropertyValue(a, "First");
+                            //Newtonsoft.Json.Linq.JArray list = (Newtonsoft.Json.Linq.JArray)a;                            
+                            //for (int i = 0; i < list.Count; i++)
+                            //{                              
+                            //    var b = list[0];
+                            //    Console.WriteLine(b.Value<string>("addr"));
+                            //}
+                            //Console.WriteLine("===");
+                            //object content = GetPropertyValue(a, "content"); 
+                            #endregion
+                        }
+                        #region 不用的代码
+                        /*
                         if (baiduPoi != null)
                         {
                             using (BaiduPOIEntities db = new BaiduPOIEntities())
@@ -92,20 +138,64 @@ namespace BaiduBusFiddler
                                 db.SaveChanges();
                             }
                         }
+                        */
+                        //if (str.Contains("place_info"))
+                        //{
+                        //    using (BaiduPOIEntities db = new BaiduPOIEntities())
+                        //    {
+                        //        while (str.Contains("acc_flag"))
+                        //        {
+                        //            baidupoi model = new baidupoi();
+                        //            model.address = Helper.Substring(ref str, "\"addr\":\"", "\",");
+                        //            model.x = Helper.Substring(ref str, "\"diPointX\":", ",");
+                        //            model.y = Helper.Substring(ref str, "\"diPointY\":", ",");
+                        //            model.name = Helper.Substring(ref str, "\"name\":\"", "\",");
+                        //            model.keyword = "";
+                        //            model.type = Helper.Substring(ref str, "\"std_tag\":\"", "\",");
+                        //            model.uid = Helper.Substring(ref str, "\"uid\":\"", "\",\"");
+                        //            db.baidupoi.Add(model);
+                        //        }
+                        //        db.SaveChanges();
+                        //    }
+                        //} 
+                        #endregion
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        
                         throw;
                     }
-                   
-              
+
+
                 }
 
 
 
             }
         }
+
+
+        //public static object GetPropertyValue(object info, string field)
+        //{
+        //    if (info == null) return null;
+        //    Type t = info.GetType();
+        //    IEnumerable<System.Reflection.PropertyInfo> property = from pi in t.GetProperties() where pi.Name.ToLower() == field.ToLower() select pi;
+        //    return property.First().GetValue(info, null);
+        //} 
+        /// <summary>
+        /// 获取一个类指定的属性值
+        /// </summary>
+        /// <param name="info">object对象</param>
+        /// <param name="field">属性名称</param>
+        /// <returns></returns>
+        public static object GetPropertyValue(object info, string field)
+        {
+            if (info == null) return null;
+            Type t = info.GetType();
+            IEnumerable<System.Reflection.PropertyInfo> property = from pi in t.GetProperties() where pi.Name.ToLower() == field.ToLower() select pi;
+            return property.First().GetValue(info, null);
+        }
+
+
         static void Main(string[] args)
         {
 
@@ -119,10 +209,10 @@ namespace BaiduBusFiddler
             {
                 Console.WriteLine("**通知: " + oNEA.NotifyString);
             };
-            Fiddler.FiddlerApplication.Log.OnLogString += delegate(object sender, LogEventArgs oLEA)
-            {
-                Console.WriteLine("**日志: " + oLEA.LogString);
-            };
+            //Fiddler.FiddlerApplication.Log.OnLogString += delegate(object sender, LogEventArgs oLEA)
+            //{
+            //    Console.WriteLine("**日志: " + oLEA.LogString);
+            //};
 
 
             Fiddler.FiddlerApplication.BeforeRequest += delegate(Fiddler.Session oS)

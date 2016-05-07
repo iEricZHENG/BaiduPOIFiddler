@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BaiduPOIModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BaiduPOIiModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="baidupoi">
           <Key>
             <PropertyRef Name="id" />
@@ -12,20 +12,20 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="address" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="x" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="y" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="x" Type="double" Nullable="false" />
+          <Property Name="y" Type="double" Nullable="false" />
           <Property Name="uid" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="keyword" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="BaiduPOIModelStoreContainer">
+        <EntityContainer Name="BaiduPOIiModelStoreContainer">
           <EntitySet Name="baidupoi" EntityType="Self.baidupoi" Schema="baidupoi" store:Type="Tables" />
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="BaiduPOIModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="BaiduPOIiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="baidupoi">
           <Key>
             <PropertyRef Name="id" />
@@ -33,8 +33,8 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="x" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="y" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="x" Type="Double" Nullable="false" />
+          <Property Name="y" Type="Double" Nullable="false" />
           <Property Name="uid" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="keyword" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
@@ -47,9 +47,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BaiduPOIModelStoreContainer" CdmEntityContainer="BaiduPOIEntities">
+        <EntityContainerMapping StorageEntityContainer="BaiduPOIiModelStoreContainer" CdmEntityContainer="BaiduPOIEntities">
           <EntitySetMapping Name="baidupoi">
-            <EntityTypeMapping TypeName="BaiduPOIModel.baidupoi">
+            <EntityTypeMapping TypeName="BaiduPOIiModel.baidupoi">
               <MappingFragment StoreEntitySet="baidupoi">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />

@@ -17,8 +17,8 @@ namespace BaiduBusFiddler
         public int id { get; set; }
         public string name { get; set; }
         public string address { get; set; }
-        public string x { get; set; }
-        public string y { get; set; }
+        public double x { get; set; }
+        public double y { get; set; }
         public string uid { get; set; }
         public string type { get; set; }
         public string keyword { get; set; }
